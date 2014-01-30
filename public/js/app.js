@@ -16,7 +16,7 @@ Statuses.prototype.add = function(text) {
 
 var NewStatusView = function(options) {
   this.statuses = options.statuses;
-  this.el = $('#new-status');
+  this.el = options.el;
 
   events.on('status:add', this.clearInput, this);
 
@@ -32,8 +32,8 @@ NewStatusView.prototype.clearInput = function() {
   this.el.find('textarea').val('');
 };
 
-var StatusesView = function() {
-  this.el = $('#statuses');
+var StatusesView = function(options) {
+  this.el = options.el;
 
   events.on('status:add', this.appendStatus, this);
 };
@@ -45,6 +45,6 @@ StatusesView.prototype.appendStatus = function(text) {
 
 $(document).ready(function() {
   var statuses = new Statuses();
-  new NewStatusView({ statuses: statuses });
-  new StatusesView();
+  new NewStatusView({ el: $('#new-status'), statuses: statuses });
+  new StatusesView({ el: $('#statuses') });
 });
