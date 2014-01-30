@@ -11,18 +11,20 @@ Statuses.prototype.add = function(options) {
 };
 
 var NewStatusView = function(options) {
-  var statuses = options.statuses;
+  this.statuses = options.statuses;
 
-  $('#new-status form').on('submit', function(e) {
-    e.preventDefault();
+  $('#new-status form').on('submit', $.proxy(this.addStatus, this));
+};
 
-    statuses.add({
-      text: $('#new-status textarea').val(),
-      success: function(data) {
-        $('#statuses ul').append('<li>' + data.text + '</li>');
-        $('#new-status textarea').val('')
-      }
-    });
+NewStatusView.prototype.addStatus = function(e) {
+  e.preventDefault();
+
+  this.statuses.add({
+    text: $('#new-status textarea').val(),
+    success: function(data) {
+      $('#statuses ul').append('<li>' + data.text + '</li>');
+      $('#new-status textarea').val('')
+    }
   });
 };
 
