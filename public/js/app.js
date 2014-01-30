@@ -14,39 +14,41 @@ Statuses.prototype.add = function(text) {
   });
 };
 
-var NewStatusView = function(options) {
-  this.statuses = options.statuses;
-  this.el = options.el;
+var NewStatusView = Backbone.View.extend({
+  initialize: function(options) {
+    this.statuses = options.statuses;
+    this.el = options.el;
 
-  events.on('status:add', this.clearInput, this);
+    events.on('status:add', this.clearInput, this);
 
-  this.$('form').on('submit', $.proxy(this.addStatus, this));
-};
+    this.$('form').on('submit', $.proxy(this.addStatus, this));
+  },
+  addStatus: function(e) {
+    e.preventDefault();
 
-NewStatusView.prototype.addStatus = function(e) {
-  e.preventDefault();
+    this.statuses.add(this.$('textarea').val());
+  },
+  clearInput: function() {
+    this.$('textarea').val('');
+  },
+  $: function(selector) {
+    return this.el.find(selector);
+  }
+});
 
-  this.statuses.add(this.$('textarea').val());
-};
-NewStatusView.prototype.clearInput = function() {
-  this.$('textarea').val('');
-};
-NewStatusView.prototype.$ = function(selector) {
-  return this.el.find(selector);
-};
+var StatusesView = Backbone.View.extend({
+  initialize: function(options) {
+    this.el = options.el;
 
-var StatusesView = function(options) {
-  this.el = options.el;
-
-  events.on('status:add', this.appendStatus, this);
-};
-
-StatusesView.prototype.appendStatus = function(text) {
-  this.$('ul').append('<li>' + text + '</li>');
-};
-StatusesView.prototype.$ = function(selector) {
-  return this.el.find(selector);
-};
+    events.on('status:add', this.appendStatus, this);
+  },
+  appendStatus: function(text) {
+    this.$('ul').append('<li>' + text + '</li>');
+  },
+  $: function(selector) {
+    return this.el.find(selector);
+  }
+});
 
 
 $(document).ready(function() {
