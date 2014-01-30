@@ -3,15 +3,7 @@ var Status = Backbone.Model.extend({
 });
 
 var Statuses = Backbone.Collection.extend({
-  add: function(text) {
-    var that = this;
-    var status = new Status();
-    status.save({ text: text }, {
-      success: function(model, data) {
-        that.trigger('add', data.text);
-      }
-    });
-  }
+  model: Status
 });
 
 var NewStatusView = Backbone.View.extend({
@@ -25,7 +17,7 @@ var NewStatusView = Backbone.View.extend({
   addStatus: function(e) {
     e.preventDefault();
 
-    this.statuses.add(this.$('textarea').val());
+    this.statuses.add({ text: this.$('textarea').val() });
   },
   clearInput: function() {
     this.$('textarea').val('');
@@ -38,8 +30,8 @@ var StatusesView = Backbone.View.extend({
 
     this.statuses.on('add', this.appendStatus, this);
   },
-  appendStatus: function(text) {
-    this.$('ul').append('<li>' + text + '</li>');
+  appendStatus: function(status) {
+    this.$('ul').append('<li>' + status.get('text') + '</li>');
   }
 });
 
