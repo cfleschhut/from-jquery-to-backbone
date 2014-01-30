@@ -8,10 +8,10 @@ Statuses.prototype.add = function(options) {
     data: { text: options.text },
     success: options.success
   });
-}
+};
 
-$(document).ready(function() {
-  var statuses = new Statuses();
+var NewStatusView = function(options) {
+  var statuses = options.statuses;
 
   $('#new-status form').on('submit', function(e) {
     e.preventDefault();
@@ -24,5 +24,11 @@ $(document).ready(function() {
       }
     });
   });
+};
 
+$(document).ready(function() {
+  var statuses = new Statuses();
+  new NewStatusView({
+    statuses: statuses
+  });
 });
