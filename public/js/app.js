@@ -7,10 +7,11 @@ var Statuses = Backbone.Collection.extend({
 });
 
 var NewStatusView = Backbone.View.extend({
+  events: {
+    'submit form': 'addStatus'
+  },
   initialize: function() {
     this.collection.on('add', this.clearInput, this);
-
-    this.$('form').on('submit', $.proxy(this.addStatus, this));
   },
   addStatus: function(e) {
     e.preventDefault();
