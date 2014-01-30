@@ -17,7 +17,6 @@ Statuses.prototype.add = function(text) {
 var NewStatusView = Backbone.View.extend({
   initialize: function(options) {
     this.statuses = options.statuses;
-    this.el = options.el;
 
     events.on('status:add', this.clearInput, this);
 
@@ -30,23 +29,15 @@ var NewStatusView = Backbone.View.extend({
   },
   clearInput: function() {
     this.$('textarea').val('');
-  },
-  $: function(selector) {
-    return this.el.find(selector);
   }
 });
 
 var StatusesView = Backbone.View.extend({
   initialize: function(options) {
-    this.el = options.el;
-
     events.on('status:add', this.appendStatus, this);
   },
   appendStatus: function(text) {
     this.$('ul').append('<li>' + text + '</li>');
-  },
-  $: function(selector) {
-    return this.el.find(selector);
   }
 });
 
