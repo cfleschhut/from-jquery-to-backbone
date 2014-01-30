@@ -6,5 +6,6 @@ get '/' do
 end
 
 post '/status' do
-  params.to_json
+  # params.to_json
+  request.body.read
 end
