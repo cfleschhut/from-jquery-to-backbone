@@ -1,25 +1,24 @@
-var events = _.clone(Backbone.Events);
-
 var Status = Backbone.Model.extend({
   url: '/status'
 });
 
-var Statuses = function() {};
-
-Statuses.prototype.add = function(text) {
-  var status = new Status();
-  status.save({ text: text }, {
-    success: function(model, data) {
-      events.trigger('status:add', data.text);
-    }
-  });
-};
+var Statuses = Backbone.Collection.extend({
+  add: function(text) {
+    var that = this;
+    var status = new Status();
+    status.save({ text: text }, {
+      success: function(model, data) {
+        that.trigger('add', data.text);
+      }
+    });
+  }
+});
 
 var NewStatusView = Backbone.View.extend({
   initialize: function(options) {
     this.statuses = options.statuses;
 
-    events.on('status:add', this.clearInput, this);
+    this.statuses.on('add', this.clearInput, this);
 
     this.$('form').on('submit', $.proxy(this.addStatus, this));
   },
@@ -35,7 +34,9 @@ var NewStatusView = Backbone.View.extend({
 
 var StatusesView = Backbone.View.extend({
   initialize: function(options) {
-    events.on('status:add', this.appendStatus, this);
+    this.statuses = options.statuses;
+
+    this.statuses.on('add', this.appendStatus, this);
   },
   appendStatus: function(text) {
     this.$('ul').append('<li>' + text + '</li>');
@@ -46,5 +47,5 @@ var StatusesView = Backbone.View.extend({
 $(document).ready(function() {
   var statuses = new Statuses();
   new NewStatusView({ el: $('#new-status'), statuses: statuses });
-  new StatusesView({ el: $('#statuses') });
+  new StatusesView({ el: $('#statuses'), statuses: statuses });
 });
