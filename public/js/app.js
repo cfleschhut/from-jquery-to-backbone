@@ -7,17 +7,15 @@ var Statuses = Backbone.Collection.extend({
 });
 
 var NewStatusView = Backbone.View.extend({
-  initialize: function(options) {
-    this.statuses = options.statuses;
-
-    this.statuses.on('add', this.clearInput, this);
+  initialize: function() {
+    this.collection.on('add', this.clearInput, this);
 
     this.$('form').on('submit', $.proxy(this.addStatus, this));
   },
   addStatus: function(e) {
     e.preventDefault();
 
-    this.statuses.add({ text: this.$('textarea').val() });
+    this.collection.add({ text: this.$('textarea').val() });
   },
   clearInput: function() {
     this.$('textarea').val('');
@@ -25,10 +23,8 @@ var NewStatusView = Backbone.View.extend({
 });
 
 var StatusesView = Backbone.View.extend({
-  initialize: function(options) {
-    this.statuses = options.statuses;
-
-    this.statuses.on('add', this.appendStatus, this);
+  initialize: function() {
+    this.collection.on('add', this.appendStatus, this);
   },
   appendStatus: function(status) {
     this.$('ul').append('<li>' + status.get('text') + '</li>');
@@ -38,6 +34,6 @@ var StatusesView = Backbone.View.extend({
 
 $(document).ready(function() {
   var statuses = new Statuses();
-  new NewStatusView({ el: $('#new-status'), statuses: statuses });
-  new StatusesView({ el: $('#statuses'), statuses: statuses });
+  new NewStatusView({ el: $('#new-status'), collection: statuses });
+  new StatusesView({ el: $('#statuses'), collection: statuses });
 });
