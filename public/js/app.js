@@ -16,27 +16,30 @@ Statuses.prototype.add = function(text) {
 
 var NewStatusView = function(options) {
   this.statuses = options.statuses;
+  this.el = $('#new-status');
 
   events.on('status:add', this.clearInput, this);
 
-  $('#new-status form').on('submit', $.proxy(this.addStatus, this));
+  this.el.find('form').on('submit', $.proxy(this.addStatus, this));
 };
 
 NewStatusView.prototype.addStatus = function(e) {
   e.preventDefault();
 
-  this.statuses.add($('#new-status textarea').val());
+  this.statuses.add(this.el.find('textarea').val());
 };
 NewStatusView.prototype.clearInput = function() {
-  $('#new-status textarea').val('');
+  this.el.find('textarea').val('');
 };
 
 var StatusesView = function() {
+  this.el = $('#statuses');
+
   events.on('status:add', this.appendStatus, this);
 };
 
 StatusesView.prototype.appendStatus = function(text) {
-  $('#statuses ul').append('<li>' + text + '</li>');
+  this.el.find('ul').append('<li>' + text + '</li>');
 };
 
 
